@@ -13,7 +13,7 @@ defmodule LiveScheduleWeb.GroupLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:group, Schedules.get_group!(id))}
+     |> assign(:group, Schedules.get_group(id))}
   end
 
   defp page_title(:show), do: "Show Group"

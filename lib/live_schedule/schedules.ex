@@ -24,18 +24,16 @@ defmodule LiveSchedule.Schedules do
   @doc """
   Gets a single group.
 
-  Raises `Ecto.NoResultsError` if the Group does not exist.
-
   ## Examples
 
-      iex> get_group!(123)
+      iex> get_group(123)
       %Group{}
 
-      iex> get_group!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_group(456)
+      nil
 
   """
-  def get_group!(id), do: Repo.get!(Group, id)
+  def get_group(id), do: Repo.get(Group, id)
 
   @doc """
   Creates a group.
@@ -120,18 +118,16 @@ defmodule LiveSchedule.Schedules do
   @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
-
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_user(123)
       %User{}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      nil
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
 
   @doc """
   Creates a user.
@@ -216,18 +212,16 @@ defmodule LiveSchedule.Schedules do
   @doc """
   Gets a single available_date.
 
-  Raises `Ecto.NoResultsError` if the Available date does not exist.
-
   ## Examples
 
-      iex> get_available_date!(123)
+      iex> get_available_date(123)
       %AvailableDate{}
 
-      iex> get_available_date!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_available_date(456)
+      nil
 
   """
-  def get_available_date!(id), do: Repo.get!(AvailableDate, id)
+  def get_available_date(id), do: Repo.get(AvailableDate, id)
 
   @doc """
   Creates a available_date.

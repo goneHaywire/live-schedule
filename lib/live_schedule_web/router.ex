@@ -17,7 +17,13 @@ defmodule LiveScheduleWeb.Router do
   scope "/", LiveScheduleWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", GroupLive.Index, :index
+    live "/new", GroupLive.Index, :new
+    live "/join", GroupLive.Index, :join
+
+    live "/:id", GroupLive.Show, :show
+
+    # live "/groups/:id/show/edit", GroupLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
