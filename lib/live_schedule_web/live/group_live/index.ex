@@ -10,7 +10,17 @@ defmodule LiveScheduleWeb.GroupLive.Index do
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
+  def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
+
+  defp form_title(:new), do: "Create Group" 
+  defp form_title(:join), do: "Join Group" 
+
+  defp form_subtitle(:new), do: "Enter a new group name" 
+  defp form_subtitle(:join), do: "Enter a group id to join" 
+
+  defp form_btn(:new), do: "Create" 
+  defp form_btn(:join), do: "Join" 
+
 end

@@ -9,8 +9,8 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        {if @action == :new, do: "Create Group", else: "Join Group"}
-        <:subtitle>{if @action == :new, do: "Enter a new group name", else: "Enter a group id to join"}</:subtitle>
+        {@title}
+        <:subtitle>{@subtitle}</:subtitle>
       </.header>
 
       <.simple_form
@@ -19,9 +19,9 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
         phx-target={@myself}
         phx-submit="submit"
       >
-        <.input field={@form[:name]} type="text" label={if @action == :new, do: "Name", else: "Group ID"} />
+        <.input field={@form[:name]} type="text" label={if @action == :join, do: "Group ID", else: "Name"} />
         <:actions>
-          <.button phx-disable-with="Loading...">{if @action == :new, do: "Create", else: "Join"}</.button>
+          <.button phx-disable-with="Loading...">{@btn_text}</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -38,6 +38,7 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
      end)}
   end
 
+  @impl true
   def handle_event("submit", %{"group" => group_params}, socket) do
     submit_group(socket, socket.assigns.action, group_params)
   end
@@ -61,10 +62,22 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
   defp submit_group(socket, :new, group_params) do
     case Schedules.create_group(group_params) do
       {:ok, group} ->
-
         {:noreply,
          socket
          |> put_flash(:info, "Group created successfully")
+         |> push_navigate(to: ~p"/#{group.id}")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, form: to_form(changeset))}
+    end
+  end
+
+  defp submit_group(socket, :edit, group_params) do
+    case Schedules.update_group(socket.assigns.group, group_params) do
+      {:ok, group} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Group updated successfully")
          |> push_navigate(to: ~p"/#{group.id}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->

@@ -10,6 +10,9 @@
     module={LiveScheduleWeb.GroupLive.FormComponent}
     id={@group.id || :new}
     action={@live_action}
+    title={form_title(@live_action)}
+    subtitle={form_subtitle(@live_action)}
+    btn_text={form_btn(@live_action)}
     group={@group}
     patch={~p"/"}
   />

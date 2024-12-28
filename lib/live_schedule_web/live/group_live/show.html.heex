@@ -18,7 +18,9 @@
   <.live_component
     module={LiveScheduleWeb.GroupLive.FormComponent}
     id={@group.id}
-    title={@page_title}
+    title={"Update Group"}
+    subtitle={"Change group name"}
+    btn_text={"Update"}
     action={@live_action}
     group={@group}
     patch={~p"/#{@group}"}
