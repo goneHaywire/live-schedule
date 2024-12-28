@@ -1,10 +1,11 @@
 defmodule LiveSchedule.Schedules.AvailableDate do
   use LiveSchedule.Schema
   import Ecto.Changeset
+  alias LiveSchedule.Schedules.User
 
   schema "available_dates" do
     field :date, :date
-    field :user_id, :binary_id
+    belongs_to :user, User
 
     timestamps(type: :utc_datetime)
   end

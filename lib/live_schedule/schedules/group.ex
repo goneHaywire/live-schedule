@@ -11,10 +11,12 @@ end
 
 defmodule LiveSchedule.Schedules.Group do
   use LiveSchedule.Schema
+  alias LiveSchedule.Schedules.User
   import Ecto.Changeset
 
   schema "groups" do
     field :name, :string
+    has_many :users, User
 
     timestamps(type: :utc_datetime)
   end

@@ -21,8 +21,10 @@ defmodule LiveScheduleWeb.Router do
     live "/new", GroupLive.Index, :new
     live "/join", GroupLive.Index, :join
 
-    live "/:id", GroupLive.Show, :show
-    live "/:id/show/edit", GroupLive.Show, :edit
+    live "/:group_id", GroupLive.Show, :show
+    live "/:group_id/schedule", GroupLive.Schedule
+    live "/:group_id/show/edit", GroupLive.Show, :edit
+    live "/:group_id/add_user", GroupLive.Show, :add_user
   end
 
   # Other scopes may use custom stacks.

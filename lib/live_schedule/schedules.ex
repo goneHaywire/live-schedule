@@ -21,6 +21,7 @@ defmodule LiveSchedule.Schedules do
     Repo.all(Group)
   end
 
+  def get_group(id, :users), do: Repo.get(Group, id) |> Repo.preload(:users)
   @doc """
   Gets a single group.
 

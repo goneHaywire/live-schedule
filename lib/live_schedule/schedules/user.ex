@@ -1,10 +1,13 @@
 defmodule LiveSchedule.Schedules.User do
   use LiveSchedule.Schema
   import Ecto.Changeset
+  alias LiveSchedule.Schedules.Group
+  alias LiveSchedule.Schedules.AvailableDate
 
   schema "users" do
     field :name, :string
-    field :group_id, :binary_id
+    belongs_to :group, Group
+    has_many :available_dates, AvailableDate
 
     timestamps(type: :utc_datetime)
   end

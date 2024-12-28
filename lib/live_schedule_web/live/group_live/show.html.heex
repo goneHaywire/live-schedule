@@ -1,16 +1,28 @@
 <.header>
-  Group {@group.id}
-  <:subtitle>This is a group record from your database.</:subtitle>
+  Group: {@group.name} ({@user_count} {if @user_count == 1, do: "user", else: "users"})
   <:actions>
     <.link patch={~p"/#{@group}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit group</.button>
     </.link>
   </:actions>
+  <:subtitle class="text-base my-4">
+    Choose one of the profiles to authenticate!
+    <br />
+    Don't see your profile? Create it now! It takes just 4.2 seconds!
+  </:subtitle>
 </.header>
 
-<.list>
-  <:item title="Name">{@group.name}</:item>
-</.list>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-4">
+  <.link class="border rounded-md flex flex-col items-center justify-center h-32 cursor-pointer" :for={user <- @group.users} patch={~p"/#{@group}/schedule"} phx-click="schedule">
+    <img src={~p"/images/profile.svg"} class="w-20" />
+    <div class="font-semibold">{user.name}</div>
+  </.link>
+  <.link class="border rounded-md flex flex-col items-center justify-center h-32 cursor-pointer" patch={~p"/#{@group}/add_user"} phx-click={JS.push_focus()}>
+    <img src={~p"/images/add-profile.svg"} class="w-20" />
+    <div class="font-semibold">Your name here</div>
+  </.link>
+</div>
 
 <.back navigate={~p"/"}>Back to groups</.back>
 
@@ -22,6 +34,17 @@
     subtitle={"Change group name"}
     btn_text={"Update"}
     action={@live_action}
+    group={@group}
+    patch={~p"/#{@group}"}
+  />
+</.modal>
+
+<.modal :if={@live_action == :add_user} id="user-modal" show on_cancel={JS.patch(~p"/#{@group}")}>
+  <.live_component
+    module={LiveScheduleWeb.GroupLive.UserForm}
+    id={@group.id}
+    action={@live_action}
+    user={%User{}}
     group={@group}
     patch={~p"/#{@group}"}
   />
