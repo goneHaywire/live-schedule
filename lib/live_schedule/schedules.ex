@@ -21,7 +21,7 @@ defmodule LiveSchedule.Schedules do
     Repo.all(Group)
   end
 
-  def get_group(id, :users), do: Repo.get(Group, id) |> Repo.preload(:users)
+  def get_group(id, :with_users), do: Repo.get(Group, id) |> Repo.preload(:users)
   @doc """
   Gets a single group.
 
@@ -102,6 +102,10 @@ defmodule LiveSchedule.Schedules do
   end
 
   alias LiveSchedule.Schedules.User
+
+  def list_users(%Group{} = group) do
+    Repo.all(from user in User, where: user.group_id == ^group.id, order_by: [desc: user.inserted_at])
+  end
 
   @doc """
   Returns the list of users.

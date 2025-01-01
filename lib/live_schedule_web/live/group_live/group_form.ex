@@ -1,4 +1,4 @@
-defmodule LiveScheduleWeb.GroupLive.FormComponent do
+defmodule LiveScheduleWeb.GroupLive.GroupForm do
   use LiveScheduleWeb, :live_component
 
   alias LiveSchedule.Schedules
@@ -9,8 +9,8 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        {@title}
-        <:subtitle>{@subtitle}</:subtitle>
+        {title(@action)}
+        <:subtitle>{subtitle(@action)}</:subtitle>
       </.header>
 
       <.simple_form
@@ -21,7 +21,7 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label={if @action == :join, do: "Group ID", else: "Name"} />
         <:actions>
-          <.button phx-disable-with="Loading...">{@btn_text}</.button>
+          <.button phx-disable-with="Loading...">{btn_text(@action)}</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -29,12 +29,12 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
   end
 
   @impl true
-  def update(%{group: group} = assigns, socket) do
+  def update(assigns, socket) do
     {:ok,
      socket
      |> assign(assigns)
      |> assign_new(:form, fn ->
-       to_form(Schedules.change_group(group))
+       to_form(Schedules.change_group(assigns[:group] || %Group{}))
      end)}
   end
 
@@ -43,16 +43,16 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
     submit_group(socket, socket.assigns.action, group_params)
   end
 
-  defp submit_group(socket, :join, %{"name" => group} = params) do
-    with true <- String.length(group) == 36,
-         %Group{} = group <- Schedules.get_group(group) 
+  defp submit_group(socket, :join, %{"name" => group_name_or_id} = params) do
+    with true <- String.length(group_name_or_id) == 36,
+         %Group{} = group <- Schedules.get_group(group_name_or_id) 
     do
       {:noreply, push_navigate(socket, to: ~p"/#{group.id}")}
     else
       _ ->
         changeset = %Group{}
         |> Group.changeset(params)
-        |> Map.put(:action, :insert)
+        |> Map.put(:action, :validate)
         |> Ecto.Changeset.add_error(:name, "Group not found")
 
         {:noreply, assign(socket, form: to_form(changeset))}
@@ -84,4 +84,16 @@ defmodule LiveScheduleWeb.GroupLive.FormComponent do
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
+
+  defp title(:new), do: "Create Group" 
+  defp title(:join), do: "Join Group" 
+  defp title(:edit), do: "Update Group" 
+
+  defp subtitle(:new), do: "Enter a new group name" 
+  defp subtitle(:join), do: "Enter a group id to join" 
+  defp subtitle(:edit), do: "Change group name" 
+
+  defp btn_text(:new), do: "Create" 
+  defp btn_text(:join), do: "Join" 
+  defp btn_text(:edit), do: "Update" 
 end

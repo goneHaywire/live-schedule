@@ -48,7 +48,8 @@ defmodule LiveScheduleWeb.GroupLive.UserForm do
         {:noreply,
          socket
          |> put_flash(:info, "User created successfully")
-         |> push_navigate(to: socket.assigns.patch)}
+         # TODO: put user in session
+         |> push_navigate(to: socket.assigns.patch, replace: true)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}

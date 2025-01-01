@@ -3,6 +3,7 @@ defmodule LiveScheduleWeb.GroupLive.Show do
 
   alias LiveSchedule.Schedules
   alias LiveSchedule.Schedules.User
+  import LiveScheduleWeb.CustomComponents
 
   @impl true
   def mount(_params, _session, socket) do
@@ -11,11 +12,13 @@ defmodule LiveScheduleWeb.GroupLive.Show do
 
   @impl true
   def handle_params(%{"group_id" => id}, _, socket) do
-    group = Schedules.get_group(id, :users)
+    group = Schedules.get_group(id)
+    users = Schedules.list_users(group)
     {:noreply,
      socket
      |> assign(:group, group)
-     |> assign(:user_count, group.users |> length)
+     |> stream(:users, users)
+     |> assign(:user_count, length(users))
      }
   end
 end
