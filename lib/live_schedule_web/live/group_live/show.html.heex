@@ -4,6 +4,9 @@
     <.link navigate={~p"/#{@group}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit group</.button>
     </.link>
+    <.link href={~p"/leave_group"} method="delete">
+      <.button>Leave group</.button>
+    </.link>
   </:actions>
   <:subtitle class="text-base my-4">
     Choose one of the profiles to authenticate!
@@ -14,11 +17,9 @@
 
 
 <div id="users" class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-4" phx-update="stream">
-  <.user_card :for={{dom_id, user} <- @streams.users} user={user} navigate={~p"/#{@group}/schedule"} phx-click="schedule" id={dom_id} />
+  <.user_card :for={{dom_id, user} <- @streams.users} user={user} navigate={~p"/select_user/#{user}"} id={dom_id} disabled={!!@selected_user} selected={user.id == @selected_user} />
   <.user_card user={nil} navigate={~p"/#{@group}/add_user"} phx-click={JS.push_focus()} />
 </div>
-
-<.back navigate={~p"/"}>Back to groups</.back>
 
 <.modal :if={@live_action == :edit} id="group-modal" show on_cancel={JS.navigate(~p"/#{@group}")}>
   <.live_component
@@ -35,6 +36,6 @@
     id={:new}
     user={%User{}}
     group={@group}
-    patch={~p"/#{@group}/schedule"}
+    patch={~p"/schedule"}
   />
 </.modal>

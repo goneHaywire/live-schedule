@@ -3,21 +3,42 @@ defmodule LiveScheduleWeb.GroupLive.Show do
 
   alias LiveSchedule.Schedules
   alias LiveSchedule.Schedules.User
+  alias LiveSchedule.Schedules.Group
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_params, %{"joined_group" => joined_group} = session, socket) do
+    self = self()
+    spawn(fn -> :timer.sleep(2000); send(self, :clear_timer) end)
+
+    socket = assign(socket, selected_user: session["selected_user"] || :nil)
+
+    case Ecto.UUID.cast(joined_group) do
+      {:ok, _} -> 
+        # TODO: handle case where group is not found
+        group = Schedules.get_group(joined_group)
+        users = Schedules.list_users(group)
+
+        {
+          :ok,
+          socket
+          |> stream(:users, users)
+          |> assign(joined_group: joined_group)
+          |> assign(:group, group)
+          |> assign(:user_count, length(users))
+        }
+        
+      _ -> 
+        {
+          :ok,
+          socket
+          # |> redirect(to: ~p"/")
+          |> assign(group: %Group{id: "test"})
+          |> stream(:users, [])
+          |> assign(joined_group: joined_group)
+          |> assign(:user_count, 0)
+        }
+    end
   end
 
-  @impl true
-  def handle_params(%{"group_id" => id}, _, socket) do
-    group = Schedules.get_group(id)
-    users = Schedules.list_users(group)
-    {:noreply,
-     socket
-     |> assign(:group, group)
-     |> stream(:users, users)
-     |> assign(:user_count, length(users))
-     }
-  end
+  def handle_info(:clear_timer, socket), do: {:noreply, clear_flash(socket)}
 end

@@ -44,7 +44,7 @@ defmodule LiveScheduleWeb.GroupLive.GroupForm do
   end
 
   defp submit_group(socket, :join, %{"name" => group_name_or_id} = params) do
-    with true <- String.length(group_name_or_id) == 36,
+    with {:ok, _} <- Ecto.UUID.cast(group_name_or_id),
          %Group{} = group <- Schedules.get_group(group_name_or_id) 
     do
       {:noreply, push_navigate(socket, to: ~p"/#{group.id}")}

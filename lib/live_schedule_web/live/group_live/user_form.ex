@@ -40,16 +40,19 @@ defmodule LiveScheduleWeb.GroupLive.UserForm do
 
   @impl true
   def handle_event("submit", %{"user" => user_params}, socket) do
-    # TODO: get group from session
     params = Map.put(user_params, "group_id", socket.assigns.group.id)
 
     case Schedules.create_user(params) do
-      {:ok, _} ->
-        {:noreply,
-         socket
+      {:ok, user} ->
+         socket = socket
          |> put_flash(:info, "User created successfully")
-         # TODO: put user in session
-         |> push_navigate(to: socket.assigns.patch, replace: true)}
+         # INFO: this is needed to trigger the event that's being listened to in the js file
+         # |> push_event("select_user", %{user_id: user.id})
+
+        {
+          :noreply,
+          socket |> push_navigate(to: ~p"/#{socket.assigns.group.id}")
+        }
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
