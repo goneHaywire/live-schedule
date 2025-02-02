@@ -3,7 +3,6 @@ defmodule LiveScheduleWeb.GroupLive.Show do
 
   alias LiveSchedule.Schedules
   alias LiveSchedule.Schedules.User
-  import LiveScheduleWeb.CustomComponents
 
   @impl true
   def mount(_params, _session, socket) do

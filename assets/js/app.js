@@ -28,6 +28,15 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken}
 })
 
+document.getElementById('mobile-menu-button').addEventListener('click', function() {
+  var mobileMenu = document.getElementById('navbar');
+  if (mobileMenu.classList.contains('hidden')) {
+    mobileMenu.classList.remove('hidden');
+  } else {
+    mobileMenu.classList.add('hidden');
+  }
+});
+
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))

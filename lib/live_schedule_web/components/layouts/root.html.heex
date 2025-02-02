@@ -12,6 +12,55 @@
     </script>
   </head>
   <body class="bg-white">
+    <nav class="w-full px-4 sm:px-6 lg:px-8 bg-gray-600 text-gray-400">
+      <div class="flex flex-col items-center justify-between py-3 text-sm sm:flex-row">
+        <div class="w-full flex justify-between sm:w-auto">
+          <div class="flex items-center gap-1 sm:gap-4">
+            <a href="/">
+              <img src={~p"/images/logo.svg"} width="36" />
+            </a>
+            <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+              LiveSchedule
+            </p>
+          </div>
+          <div id="mobile-menu-button" class="sm:hidden cursor-pointer">
+            <img src="/images/menu.svg" alt="Menu" class="h-8"/>
+          </div>
+        </div>
+        <ul id="navbar" class="hidden w-full flex flex-col items-start gap-4 font-semibold leading-6 text-zinc-200 pt-4 sm:w-auto sm:flex sm:flex-row sm:items-center sm:pt-0">
+          <%= if @selected_user do %>
+            <.nav_btn navigate={~p"/schedule"} first>Schedule</.nav_btn>
+            <.nav_btn navigate={~p"/#{@joined_group}"}>Group page</.nav_btn>
+            <div class="">Logged as: {@selected_user}</div>
+          <%= else %>
+            <%= if @joined_group do %>
+              <.nav_btn first navigate={~p"/#{@joined_group}"}>Group page</.nav_btn>
+              <div>No user selected</div>
+            <%= else %>
+              <.nav_btn first navigate={~p"/new"}>New Group</.nav_btn>
+              <div>No group joined</div>
+            <%= end %>
+          <%= end %>
+        </ul>
+      </div>
+      <div id="mobile-menu" class="hidden sm:hidden">
+        <ul class="flex flex-col items-start gap-4 font-semibold leading-6 text-zinc-900">
+          <%= if @selected_user do %>
+            <.link class="text-zinc-900 rounded-lg bg-zinc-100 hover:bg-zinc-200 px-4 py-1" navigate={~p"/schedule"}>Schedule</.link>
+            <.link class="text-zinc-900" navigate={~p"/#{@joined_group}"}>Group page</.link>
+            <div class="">Logged as: {@selected_user}</div>
+          <%= else %>
+            <%= if @joined_group do %>
+              <.link class="text-zinc-900 rounded-lg bg-zinc-100 hover:bg-zinc-200 px-4 py-1" navigate={~p"/#{@joined_group}"}>Group page</.link>
+              <div>No user selected</div>
+            <%= else %>
+              <.link class="text-zinc-900 rounded-lg bg-zinc-100 hover:bg-zinc-200 px-4 py-1" navigate={~p"/new"}>New Group</.link>
+              <div>No group joined</div>
+            <%= end %>
+          <%= end %>
+        </ul>
+      </div>
+    </nav>
     {@inner_content}
   </body>
 </html>

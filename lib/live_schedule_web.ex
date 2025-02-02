@@ -89,6 +89,7 @@ defmodule LiveScheduleWeb do
       import Phoenix.HTML
       # Core UI components
       import LiveScheduleWeb.CoreComponents
+      import LiveScheduleWeb.CustomComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
