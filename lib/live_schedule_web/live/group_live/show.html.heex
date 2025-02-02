@@ -2,7 +2,7 @@
   Group: {@group.name} ({@user_count} {if @user_count == 1, do: "user", else: "users"})
   <:actions>
     <.link navigate={~p"/#{@group}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit group</.button>
+      <.button class="bg-accent text-white">Edit group</.button>
     </.link>
     <.link href={~p"/leave_group"} method="delete">
       <.button>Leave group</.button>
