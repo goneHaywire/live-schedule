@@ -14,7 +14,7 @@ defmodule LiveSchedule.Schedules.AvailableDate do
   def changeset(available_date, attrs) do
     # TODO: validate date is in the future
     available_date
-    |> cast(attrs, [:date, :user_id])
-    |> validate_required([:date, :user_id])
+    |> cast(attrs, [:date])
+    |> validate_required([:date])
   end
 end

@@ -6,7 +6,11 @@ defmodule LiveSchedule.Schedules do
   import Ecto.Query, warn: false
   alias LiveSchedule.Repo
 
-  alias LiveSchedule.Schedules.Group
+  alias LiveSchedule.Schedules.{Group, User, AvailableDate}
+
+  defp order_by_last_created(query) do
+    from q in query, order_by: [desc: q.inserted_at]
+  end
 
   @doc """
   Returns the list of groups.
@@ -21,7 +25,6 @@ defmodule LiveSchedule.Schedules do
     Repo.all(Group)
   end
 
-  def get_group(id, :with_users), do: Repo.get(Group, id) |> Repo.preload(:users)
   @doc """
   Gets a single group.
 
@@ -103,8 +106,15 @@ defmodule LiveSchedule.Schedules do
 
   alias LiveSchedule.Schedules.User
 
-  def list_users(%Group{} = group) do
-    Repo.all(from user in User, where: user.group_id == ^group.id, order_by: [desc: user.inserted_at])
+  def list_group_users(%Group{} = group) do
+    User
+    |> group_users_query(group)
+    |> order_by_last_created()
+    |> Repo.all()
+  end
+
+  defp group_users_query(query, %Group{id: group_id}) do
+    from u in query, where: u.group_id == ^group_id
   end
 
   @doc """
@@ -146,9 +156,10 @@ defmodule LiveSchedule.Schedules do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(%Group{} = group, attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:group, group)
     |> Repo.insert()
   end
 
@@ -214,6 +225,20 @@ defmodule LiveSchedule.Schedules do
     Repo.all(AvailableDate)
   end
 
+  def list_user_available_dates(%User{} = user) do
+    AvailableDate
+    |> user_available_dates_query(user)
+    |> Repo.all()
+  end
+
+  defp user_available_dates_query(query, %User{id: user_id} = user) do
+    from a in query, where: a.user_id == ^user_id
+  end
+
+  defp count_available_dates(query) do
+    from a in query, select: {a, count(a.id)}
+  end
+
   @doc """
   Gets a single available_date.
 
@@ -240,9 +265,10 @@ defmodule LiveSchedule.Schedules do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_available_date(attrs \\ %{}) do
+  def create_available_date(%User{} = user, attrs \\ %{}) do
     %AvailableDate{}
     |> AvailableDate.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 

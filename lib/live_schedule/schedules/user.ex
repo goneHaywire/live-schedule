@@ -15,7 +15,7 @@ defmodule LiveSchedule.Schedules.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :group_id])
-    |> validate_required([:name, :group_id])
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end
