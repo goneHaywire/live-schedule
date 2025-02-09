@@ -2,26 +2,28 @@
   Group: {@group.name} ({@user_count} {if @user_count == 1, do: "user", else: "users"})
   <:actions>
     <.link navigate={~p"/#{@group}/show/edit"} phx-click={JS.push_focus()}>
-      <.button class="bg-accent text-white">Edit group</.button>
+      <.button class="shadow-md">Edit group</.button>
     </.link>
     <.link href={~p"/leave_group"} method="delete">
-      <.button>Leave group</.button>
+      <.button class="shadow-md">Leave group</.button>
     </.link>
   </:actions>
-  <:subtitle class="text-base my-4">
-    Choose one of the profiles to authenticate!
-    <br />
-    Don't see your profile? Create it now! It takes just 4.2 seconds!
+  <:subtitle>
+    <span class="text-base my-4">
+      Choose one of the profiles to authenticate!
+      <br />
+      Don't see your profile? Create it now! It takes just 4.2 seconds!
+    </span>
   </:subtitle>
 </.header>
 
 
 <div id="users" class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-4" phx-update="stream">
   <.user_card :for={{dom_id, user} <- @streams.users} user={user} navigate={~p"/select_user/#{user}"} id={dom_id} disabled={!!@selected_user} selected={user.id == @selected_user} />
-  <.user_card user={nil} navigate={~p"/#{@group}/add_user"} phx-click={JS.push_focus()} />
+  <.user_card navigate={~p"/#{@group}/add_user"} phx-click={JS.push_focus()} />
 </div>
 
-<.modal :if={@live_action == :edit} id="group-modal" show on_cancel={JS.navigate(~p"/#{@group}")}>
+<.modal :if={@live_action == :edit} id="group-modal" show on_cancel={JS.navigate(~p"/#{@group}") |> JS.pop_focus()}>
   <.live_component
     module={LiveScheduleWeb.GroupLive.GroupForm}
     id={@group.id}
@@ -30,12 +32,11 @@
   />
 </.modal>
 
-<.modal :if={@live_action == :add_user} id="user-modal" show on_cancel={JS.navigate(~p"/#{@group}")}>
+<.modal :if={@live_action == :add_user} id="user-modal" show on_cancel={JS.navigate(~p"/#{@group}") |> JS.pop_focus()}>
   <.live_component
     module={LiveScheduleWeb.GroupLive.UserForm}
     id={:new}
     user={%User{}}
     group={@group}
-    patch={~p"/schedule"}
   />
 </.modal>

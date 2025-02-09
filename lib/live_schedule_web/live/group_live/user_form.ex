@@ -51,7 +51,7 @@ defmodule LiveScheduleWeb.GroupLive.UserForm do
 
         {
           :noreply,
-          socket |> push_navigate(to: ~p"/#{socket.assigns.group.id}")
+          socket |> push_navigate(to: ~p"/#{socket.assigns.group}")
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

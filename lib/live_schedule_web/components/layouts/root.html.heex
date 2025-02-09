@@ -33,7 +33,7 @@
           <%= if @selected_user do %>
             <.nav_btn navigate={~p"/schedule"} primary>Schedule</.nav_btn>
             <.nav_btn navigate={~p"/#{@joined_group}"}>Group page</.nav_btn>
-            <div class="text-white-dark">Logged as: {@selected_user}</div>
+            <div class="text-white-dark">Logged as: {@selected_user.name}</div>
           <%= else %>
             <%= if @joined_group do %>
               <.nav_btn primary navigate={~p"/#{@joined_group}"}>Group page</.nav_btn>
@@ -50,7 +50,7 @@
           <%= if @selected_user do %>
             <.link class="text-zinc-900 rounded-lg bg-zinc-100 hover:bg-zinc-200 px-4 py-1" navigate={~p"/schedule"}>Schedule</.link>
             <.link class="text-zinc-900" navigate={~p"/#{@joined_group}"}>Group page</.link>
-            <div class="">Logged as: {@selected_user}</div>
+            <div class="">Logged as: {@selected_user.name}</div>
           <%= else %>
             <%= if @joined_group do %>
               <.link class="text-zinc-900 rounded-lg bg-zinc-100 hover:bg-zinc-200 px-4 py-1" navigate={~p"/#{@joined_group}"}>Group page</.link>

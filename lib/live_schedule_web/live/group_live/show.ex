@@ -2,8 +2,7 @@ defmodule LiveScheduleWeb.GroupLive.Show do
   use LiveScheduleWeb, :live_view
 
   alias LiveSchedule.Schedules
-  alias LiveSchedule.Schedules.User
-  alias LiveSchedule.Schedules.Group
+  alias LiveSchedule.Schedules.{User, Group}
 
   @impl true
   def mount(_params, %{"joined_group" => joined_group} = session, socket) do

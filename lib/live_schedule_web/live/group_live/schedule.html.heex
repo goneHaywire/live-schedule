@@ -4,7 +4,7 @@
   <div class="h-[30vh] sm:h-[83vh] sm:shadow-md sm:rounded-lg sm:py-4 sm:px-4">
     <div class="flex justify-between items-center mb-3">
       <h2 class="text-lg font-semibold leading-8 text-black mb-2">Users</h2>
-      <.link href={~p"/deselect_user"} method="delete" class="bg-accent text-white px-2 py-1 sm:px-4 sm:py-2 rounded-lg">Change user</.link>
+      <.link href={~p"/deselect_user"} method="delete" class="bg-accent text-white px-2 py-1 sm:px-4 sm:py-2 rounded-lg shadow-md">Change user</.link>
     </div>
 
     <div class="h-[calc(30vh-4rem)] sm:h-[calc(83vh-5rem)] overflow-y-auto flex flex-col rounded-md">
@@ -22,6 +22,7 @@
     <div class={"h-[calc(30vh-4rem)] sm:h-[calc(83vh-5rem)] overflow-y-auto flex flex-col #{if length(@dates) == 0, do: "justify-center", else: ""}"}>
     <%= if length(@dates) > 0 do %>
       <.user_row :for={user <- @users} user={user} />
+      <.user_slice :for={user <- @users} user={user} />
     <% else %>
       <div class="text-center text-2xl text-main">There are no selected dates.<br />Be the first to schedule!</div>
     <% end %>

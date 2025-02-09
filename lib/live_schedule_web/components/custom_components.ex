@@ -4,7 +4,7 @@ defmodule LiveScheduleWeb.CustomComponents do
   alias Phoenix.LiveView.HTML
   alias LiveSchedule.Schedules.User
 
-  attr :user, User, required: false
+  attr :user, User, default: nil
   attr :navigate, :string, required: true
   attr :rest, :global
   attr :disabled, :boolean, default: false
@@ -39,7 +39,7 @@ defmodule LiveScheduleWeb.CustomComponents do
   end
   
   attr :user, User, required: true
-  def user_row(assigns) do
+  def user_slice(assigns) do
 
     ~H"""
     <div class="text-main-dark bg-white min-h-10 px-2 mt-3 first:mt-0 sm:min-h-16 border rounded-md flex items-center sm:px-4 sm:mt-5">
@@ -51,6 +51,7 @@ defmodule LiveScheduleWeb.CustomComponents do
   end
 
   attr :primary, :boolean, default: false
+  attr :navigate, :string
   slot :inner_block, required: true
 
   def nav_btn(assigns) do
